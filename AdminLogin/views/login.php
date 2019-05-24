@@ -71,7 +71,7 @@ $header = '<link rel="stylesheet" href="' . Typecho_Common::url('normalize.css?v
 <script>
 var type = <?=$option->type?>;
 function getresult() {
-		var api = "<?= Typecho_Common::url('AdminLogin/getresult',$options->adminUrl);?>";
+		var api = "<?= AdminLogin_Plugin::tourl('AdminLogin/getresult');?>";
 		if (window.type == 'wx') {
 			post = 'login=1&uuid=' + data['data'];
 		} else {
@@ -102,7 +102,7 @@ function getresult() {
 		});
 	}
 function getqrocde(type) {
-		var api = "<?= Typecho_Common::url('AdminLogin/getqrcode',$options->adminUrl);?>";
+		var api = "<?= AdminLogin_Plugin::tourl('AdminLogin/getqrcode');?>";
 		$.ajax({
 			url: api,
 			type: 'POST',

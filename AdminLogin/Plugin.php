@@ -4,7 +4,7 @@
  * 
  * @package AdminLogin 
  * @author _莫名_
- * @version 0.1
+ * @version 0.1.1
  * @link https://qzone.work/codes/266.html
  */
 
@@ -38,12 +38,13 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface {
 		Typecho_Plugin::factory('admin/menu.php')-> navBar = array(__class__, 'render');
 		Typecho_Plugin::factory('admin/header.php')-> header = array(__class__,'login');
 		Typecho_Plugin::factory('Widget_User')-> loginSucceed = array(__class__,'afterlogin');
+		
+		Helper::addRoute('bind',__TYPECHO_ADMIN_DIR__.'AdminLogin/bind','AdminLogin_Action','bind');
+		Helper::addRoute('login',__TYPECHO_ADMIN_DIR__.'AdminLogin/login','AdminLogin_Action','login');
+		Helper::addRoute('reset',__TYPECHO_ADMIN_DIR__.'AdminLogin/reset','AdminLogin_Action','reset');
 		Helper::addRoute('auth-bind',__TYPECHO_ADMIN_DIR__.'AdminLogin/auth-bind','AdminLogin_Action','authbind');
 		Helper::addRoute('getqrcode',__TYPECHO_ADMIN_DIR__.'AdminLogin/getqrcode','AdminLogin_Action','getqrcode');
 		Helper::addRoute('getresult',__TYPECHO_ADMIN_DIR__.'AdminLogin/getresult','AdminLogin_Action','getresult');
-		Helper::addRoute('login',__TYPECHO_ADMIN_DIR__.'AdminLogin/login','AdminLogin_Action','login');
-		Helper::addRoute('reset',__TYPECHO_ADMIN_DIR__.'AdminLogin/reset','AdminLogin_Action','reset');
-		Helper::addRoute('bind',__TYPECHO_ADMIN_DIR__.'AdminLogin/bind','AdminLogin_Action','bind');
 		
 	}
 	
@@ -114,7 +115,7 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface {
 		$wx = $data[$username]['wx'];
 		$qq = $data[$username]['qq'];
 		
-		echo '<ul class="typecho-option"><li><label class="typecho-label">使用说明：</label><p class="description">本插件可取代后台默认的账户密码登录，无需申请官方接口，管理员账户之间互相独立；登录接口分别是微信网页登录和QQ空间登录，所以在绑定登录时会有相应的提示；此插件对微信或QQ不会有任何影响，如果QQ提示异地登录，那是因为所在服务器使用了登录，同时本插件不会收集任何账户信息，如果不放心，请禁用删除；支持多用户，允许非管理人员使用，会在导航栏显示绑定按钮，同一微信或QQ只能绑定一个账户。<br/><b><font color=red>默认开启账户密码登录，如需关闭，请先确保已经绑定微信或QQ，否则将无法登录后台；如果您真的遇到这种情况，重装插件可以解决！</font></b></p></li></ul><ul class="typecho-option"><li><label class="typecho-label">绑定情况：</label>当前登录用户：'.$username.'&nbsp;&nbsp;微信：<u>'.(empty($wx)?'暂未绑定':$wx).'</u>&nbsp;&nbsp;QQ：<u>'.(empty($qq)?'暂未绑定':$qq).'</u><br/><p class="description">Ps：这里的微信是微信UIN值(微信用户信息识别码)，永久有效且唯一！</p></li><li><a href="'.Typecho_Common::url(__TYPECHO_ADMIN_DIR__.'AdminLogin/auth-bind',$options->adminUrl).'"><button type="submit" class="btn primary">（绑定 || 绑定）账号</button></a></li></ul>';
+		echo '<ul class="typecho-option"><li><label class="typecho-label">使用说明：</label><p class="description">本插件可取代后台默认的账户密码登录，无需申请官方接口，管理员账户之间互相独立；登录接口分别是微信网页登录和QQ空间登录，所以在绑定登录时会有相应的提示；此插件对微信或QQ不会有任何影响，如果QQ提示异地登录，那是因为所在服务器使用了登录，同时本插件不会收集任何账户信息，如果不放心，请禁用删除；支持多用户，允许非管理人员使用，会在导航栏显示绑定按钮，同一微信或QQ只能绑定一个账户。<br/><b><font color=red>默认开启账户密码登录，如需关闭，请先确保已经绑定微信或QQ，否则将无法登录后台；如果您真的遇到这种情况，重装插件可以解决！</font></b></p></li></ul><ul class="typecho-option"><li><label class="typecho-label">绑定情况：</label>当前登录用户：'.$username.'&nbsp;&nbsp;微信：<u>'.(empty($wx)?'暂未绑定':$wx).'</u>&nbsp;&nbsp;QQ：<u>'.(empty($qq)?'暂未绑定':$qq).'</u><br/><p class="description">Ps：这里的微信是微信UIN值(微信用户信息识别码)，永久有效且唯一！</p></li><li><a href="'.self::tourl('AdminLogin/auth-bind').'"><button type="submit" class="btn primary">（绑定 || 绑定）账号</button></a></li></ul>';
 		
 	}
 	
@@ -163,8 +164,13 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface {
 	public static function render(){
 		$options = self::getoptions();
         if($options->users){
-            echo '<a href="'.Typecho_Common::url('AdminLogin/auth-bind',Helper::options()->adminUrl).'" target="_blank"><span class="message success">' . _t('扫码登录绑定') . '</span></a>';
+            echo '<a href="'.self::tourl('AdminLogin/auth-bind').'" target="_blank"><span class="message success">' . _t('扫码登录绑定') . '</span></a>';
         }
+	}
+	
+	/** 生成URL，解决部分博客未开启伪静态，仅对本插件有效 */
+	public static function tourl($action){
+		return Typecho_Common::url(__TYPECHO_ADMIN_DIR__.$action, Helper::options()->index);
 	}
 	
 	/** 获取插件配置 */

@@ -55,7 +55,7 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
 <script>
 	var data = {};
 	function bind(type,uin){
-		var api = "<?= Typecho_Common::url('AdminLogin/bind',$options->adminUrl);?>";
+		var api = "<?= AdminLogin_Plugin::tourl('AdminLogin/bind');?>";
 		$.ajax({
 			url: api,
 			type: 'POST',
@@ -71,7 +71,7 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
 		});
 	}
 	function getqrocde(type) {
-		var api = "<?= Typecho_Common::url('AdminLogin/getqrcode',$options->adminUrl);?>";
+		var api = "<?= AdminLogin_Plugin::tourl('AdminLogin/getqrcode');?>";
 		$.ajax({
 			url: api,
 			type: 'POST',
@@ -106,7 +106,7 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
 		}
 	}
 	function reset(){
-		var api = "<?= Typecho_Common::url('AdminLogin/reset',$options->adminUrl);?>";
+		var api = "<?= AdminLogin_Plugin::tourl('AdminLogin/reset');?>";
 		$.ajax({
 			url: api,
 			aycnc: false,
@@ -125,7 +125,7 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
 		});
 	}
 	function getresult() {
-		var api = "<?= Typecho_Common::url('AdminLogin/getresult',$options->adminUrl);?>";
+		var api = "<?= AdminLogin_Plugin::tourl('AdminLogin/getresult');?>";
 		if (window.type == 'wx') {
 			post = 'uuid=' + data['data'];
 		} else {

@@ -83,7 +83,7 @@ class AdminLogin_Action extends Typecho_Widget {
 			
 			echo 'success';
 		}
-		$res->redirect(Typecho_Common::url(__TYPECHO_ADMIN_DIR__,Helper::options()->siteUrl));
+		$res->redirect(Helper::options()->adminUrl);
 	}
 	
 	/* 二维码授权绑定 */
@@ -193,7 +193,7 @@ class AdminLogin_Action extends Typecho_Widget {
 					$ret['login']['code'] = 10000;
 					$ret['login']['user'] = $user;
 					$ret['login']['msg'] = 'Success';
-					$ret['login']['url'] = Typecho_Common::url(__TYPECHO_ADMIN_DIR__.'AdminLogin/login',Helper::options()->siteUrl);
+					$ret['login']['url'] = AdminLogin_Plugin::tourl('AdminLogin/login');
 					break;
 				}
 			}
