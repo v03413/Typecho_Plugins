@@ -1,0 +1,20 @@
+/**
+ *  阿里云OSS 图床外链，基于插件(OssForTypecho)制作
+ * 
+ * @package OssImg
+ * @author _莫名_
+ * @version 1.0.0
+ * @link https://qzone.work/resources/255.html
+ * @dependence 1.0-*
+ * @date 2019-05-18
+ *
+ */
+ 
+
+使用说明：
+1.基于插件(OssForTypecho)二次开发。
+2.在阿里云 AccessKey管理控制台 页面里获取AccessKeyID与AccessKeySecret。
+3.插件不会验证配置的正确性，请自行确认配置信息正确，否则不能正常使用。
+4.本插件不会替换之前已上传图片的链接，已存在不受影响！
+5.修复原插件(OssForTypecho)文件无法删除的问题。
+6.必须保证Bucket拥有公共读权限，否则图床外链无效。
