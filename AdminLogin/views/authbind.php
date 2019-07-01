@@ -22,9 +22,9 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>AdminLogin - 扫描登录授权绑定</title>
         <meta name="robots" content="noindex, nofollow">
-        <link rel="stylesheet" href="/admin/css/normalize.css?v=17.10.30">
-		<link rel="stylesheet" href="/admin/css/grid.css?v=17.10.30">
-		<link rel="stylesheet" href="/admin/css/style.css?v=17.10.30">
+        <link rel="stylesheet" href="<?=__TYPECHO_ADMIN_DIR__?>css/normalize.css?v=17.10.30">
+		<link rel="stylesheet" href="<?=__TYPECHO_ADMIN_DIR__?>css/grid.css?v=17.10.30">
+		<link rel="stylesheet" href="<?=__TYPECHO_ADMIN_DIR__?>css/style.css?v=17.10.30">
 		<!--[if lt IE 9]>
 		<script src="/admin/js/html5shiv.js?v=17.10.30"></script>
 		<script src="/admin/js/respond.js?v=17.10.30"></script>
@@ -49,9 +49,9 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
         <p class="more-link"> <a href="/">返回首页</a> </p>
     </div>
 </div>
-<script src="/admin/js/jquery.js?v=17.10.30"></script>
-<script src="/admin/js/jquery-ui.js?v=17.10.30"></script>
-<script src="/admin/js/typecho.js?v=17.10.30"></script>
+<script src="<?=__TYPECHO_ADMIN_DIR__?>js/jquery.js?v=17.10.30"></script>
+<script src="<?=__TYPECHO_ADMIN_DIR__?>js/jquery-ui.js?v=17.10.30"></script>
+<script src="<?=__TYPECHO_ADMIN_DIR__?>js/typecho.js?v=17.10.30"></script>
 <script>
 	var data = {};
 	function bind(type,uin){
