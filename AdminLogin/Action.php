@@ -104,7 +104,7 @@ class AdminLogin_Action extends Typecho_Widget
             $ret             = self::get_curl($api, $paras);
             preg_match('/qrsig=(.*?);/', $ret, $matches);
             preg_match_all('/ (\d){3}/', $ret, $Conlen);
-            $arr             = explode('com;', $ret);
+            $arr             = explode("\r\n\r\n", $ret);
             $qrcode['qrsig'] = $matches[1];
             $qrcode['data']  = base64_encode(trim($arr['1']));
         } else {
