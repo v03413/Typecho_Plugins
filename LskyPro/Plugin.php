@@ -116,7 +116,7 @@ HTML;
         $ext = self::_getSafeName($content['title']);
         if (self::_isImage($ext)) {
 
-            return $content['attachment']->path;
+            return $content['attachment']->path ?? '';
         }
 
         $ret = explode(self::UPLOAD_DIR, $arr['path']);
