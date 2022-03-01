@@ -18,5 +18,4 @@
 
 ## LskyPro
 
-一款使用开源程序**兰空图床**，将图片单独托管的外链插件  
-兰空图床项目地址：https://github.com/wisp-x/lsky-pro  
+一款使用开源程序**兰空图床**，将图片单独托管的外链插件；使用介绍：https://qzone.work/codes/725.html  
