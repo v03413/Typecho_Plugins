@@ -241,7 +241,7 @@ HTML;
 
         return [
             'img_id' => $json['data']['id'],
-            'name'   => $json['data']['name'],
+            'name'   => $file['name'],
             'path'   => $json['data']['url'],
             'size'   => $json['data']['size'],
             'type'   => $ext,
