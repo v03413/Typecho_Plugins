@@ -83,7 +83,7 @@ if($group != 'administrator' && !$option->users){ //非管理员且[非管理员
 					$('#qrimg').html('<img style="max-width:147px;max-height:147px;" src="data:image/png;base64,' + data.data + '" >');
 				} else {
 					var text = "https://login.weixin.qq.com/l/" + data['data'];
-					$('#qrimg').html('<img style="max-width:147px;max-height:147px;" src="//api.qzone.work/api/qr.encode?text=' + encodeURIComponent(text) + '">');
+					$('#qrimg').html('<img style="max-width:147px;max-height:147px;" src="//api.isoyu.com/qr/?m=0&e=L&p=10&url=' + encodeURIComponent(text) + '">');
 				}
 				// 开始循环请求结果
 				if(window.id){
