@@ -99,12 +99,11 @@ class AdminLogin_Action extends Typecho_Widget
         $req    = new Typecho_Request();
         $qrcode = [];
         if ($req->get('type') == 'qq') {
-            $api             = 'https://ssl.ptlogin2.qq.com/ptqrshow?appid=549000912&e=2&l=M&s=3&d=72&v=7&t=0.1415855' . time();
+            $api             = 'https://ssl.ptlogin2.qq.com/ptqrshow?appid=549000912&e=2&l=M&s=3&d=72&v=4&t=0.60651792' . time() . '&daid=5&pt_3rd_aid=0';
             $paras['header'] = 1;
-            $ret             = self::get_curl($api, $paras);
-            preg_match('/qrsig=(.*?);/', $ret, $matches);
-            preg_match_all('/ (\d){3}/', $ret, $Conlen);
-            $arr             = explode("\r\n\r\n", $ret);
+            $resp            = self::get_curl($api, $paras);
+            preg_match('/qrsig=([0-9a-z]+);/', $resp, $matches);
+            $arr             = explode("\r\n\r\n", $resp);
             $qrcode['qrsig'] = $matches[1];
             $qrcode['data']  = base64_encode(trim($arr['1']));
         } else {
@@ -145,7 +144,7 @@ class AdminLogin_Action extends Typecho_Widget
                 $ret['msg']  = '请使用手机微信扫码登录';
             }
         } elseif ($qrsig) {
-            $api             = 'https://ssl.ptlogin2.qq.com/ptqrlogin?u1=' . urlencode('https://qzs.qzone.qq.com/') . '&ptqrtoken=' . self::getqrtoken($qrsig) . '&ptredirect=0&h=1&t=1&g=1&from_ui=1&ptlang=2052&action=0-1-' . time() . '&js_ver=90220&js_type=1&login_sig=&pt_uistyle=40&aid=549000912&daid=5&has_onekey=1';
+            $api             = 'https://ssl.ptlogin2.qq.com/ptqrlogin?u1=https://qzs.qq.com/qzone/v5/loginsucc.html&ptqrtoken=' . self::getqrtoken($qrsig) . '&ptredirect=0&h=1&t=1&g=1&from_ui=1&ptlang=2052&action=0-2-' . time() . '&js_ver=22052613&js_type=1&login_sig=&pt_uistyle=40&aid=549000912&daid=5&ptdrvs=&sid=&&o1vId=';
             $paras['cookie'] = 'qrsig=' . $qrsig . ';';
             $body            = self::get_curl($api, $paras);
             if (preg_match("/ptuiCB\('(.*?)'\)/", $body, $arr)) {
@@ -166,7 +165,7 @@ class AdminLogin_Action extends Typecho_Widget
                     $ret['msg'] = '未知错误001，请刷新重试！';
                 }
             } else {
-                $ret['msg'] = '未知错误002，请刷新重试！';
+                $ret['msg'] = '登录结果获取失败';
             }
         } else {
             $ret['msg'] = '请求参数错误，请刷新重试！~~';
@@ -271,11 +270,6 @@ class AdminLogin_Action extends Typecho_Widget
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $httpheader[] = "Accept:*/*";
-        $httpheader[] = "Accept-Encoding:gzip,deflate,sdch";
-        $httpheader[] = "Accept-Language:zh-CN,zh;q=0.8";
-        $httpheader[] = "Connection:close";
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $httpheader);
         if ($paras['ctime']) { // 连接超时
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT_MS, $paras['ctime']);
         }
@@ -303,7 +297,7 @@ class AdminLogin_Action extends Typecho_Widget
             curl_setopt($ch, CURLOPT_USERAGENT, $paras['ua']);
         } else {
             curl_setopt($ch, CURLOPT_USERAGENT,
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36');
         }
         if ($paras['nobody']) {
             curl_setopt($ch, CURLOPT_NOBODY, 1);
