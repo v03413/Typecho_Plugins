@@ -1,4 +1,7 @@
 <?php
+
+use Typecho\Request;
+
 /**
  * 后台扫码登录，支持接口：【微信，QQ】
  *
@@ -7,9 +10,9 @@
  * @version 0.1.1
  * @link https://qzone.work/codes/266.html
  */
-
 class AdminLogin_Plugin implements Typecho_Plugin_Interface
 {
+
     const PLUGIN_NAME = 'AdminLogin';
     const PLUGIN_PATH = __TYPECHO_ROOT_DIR__ . __TYPECHO_PLUGIN_DIR__ . '/AdminLogin/';
 
@@ -19,7 +22,7 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface
      * @static
      * @access public
      * @return void
-     * @throws Typecho_Plugin_Exception
+     * @throws Exception
      */
     public static function activate()
     {
@@ -54,7 +57,7 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface
      * @static
      * @access public
      * @return void
-     * @throws Typecho_Plugin_Exception
+     * @throws Exception
      */
     public static function deactivate()
     {
@@ -73,10 +76,7 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface
 
     /**
      * 获取插件配置面板
-     *
-     * @static
-     * @access public
-     * @param Typecho_Widget_Helper_Form $form 配置面板
+     * @param Typecho_Widget_Helper_Form $form
      * @return void
      */
     public static function config(Typecho_Widget_Helper_Form $form)
@@ -146,13 +146,9 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface
 
     public static function login($header)
     {
-
-        /** 获取链接信息 */
-        $baseurl = Typecho_Request::getInstance()->getBaseUrl();
-
+        $baseurl = Request::getInstance()->getRequestUrl();
         /** 判断是否登录 */
         if ($baseurl == __TYPECHO_ADMIN_DIR__ . 'login.php') {
-
             /** 清空输出缓存区 */
             ob_clean();
 
@@ -251,5 +247,4 @@ class AdminLogin_Plugin implements Typecho_Plugin_Interface
             return $keyc . str_replace('=', '', base64_encode($result));
         }
     }
-
 }
