@@ -1,4 +1,12 @@
 <?php
+
+use Typecho\Plugin\PluginInterface;
+use Typecho\Widget\Helper\Form;
+use Typecho\Widget\Helper\Form\Element\Text;
+use Utils\Helper;
+use Typecho\Common;
+use Widget\Upload;
+
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
 /**
@@ -9,17 +17,17 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
  * @version 1.0.0
  * @link https://qzone.work
  */
-class LskyPro_Plugin implements Typecho_Plugin_Interface
+class LskyPro_Plugin implements PluginInterface
 {
     const UPLOAD_DIR  = '/usr/uploads'; //上传文件目录路径
     const PLUGIN_NAME = 'LskyPro'; //插件名称
 
-    public static function activate()
+    public static function activate(): void
     {
-        Typecho_Plugin::factory('Widget_Upload')->uploadHandle     = array(__CLASS__, 'uploadHandle');
-        Typecho_Plugin::factory('Widget_Upload')->modifyHandle     = array(__CLASS__, 'modifyHandle');
-        Typecho_Plugin::factory('Widget_Upload')->deleteHandle     = array(__CLASS__, 'deleteHandle');
-        Typecho_Plugin::factory('Widget_Upload')->attachmentHandle = array(__CLASS__, 'attachmentHandle');
+        Typecho\Plugin::factory('Widget_Upload')->uploadHandle     = array(__CLASS__, 'uploadHandle');
+        Typecho\Plugin::factory('Widget_Upload')->modifyHandle     = array(__CLASS__, 'modifyHandle');
+        Typecho\Plugin::factory('Widget_Upload')->deleteHandle     = array(__CLASS__, 'deleteHandle');
+        Typecho\Plugin::factory('Widget_Upload')->attachmentHandle = array(__CLASS__, 'attachmentHandle');
     }
 
     public static function deactivate()
@@ -27,28 +35,28 @@ class LskyPro_Plugin implements Typecho_Plugin_Interface
 
     }
 
-    public static function config(Typecho_Widget_Helper_Form $form)
+    public static function config(Form $form): void
     {
         $html = <<<HTML
 <p>作者：<a target="_blank" href="https://qzone.work/codes/725.html">莫名博客</a>；一款使用<a href="https://github.com/wisp-x/lsky-pro" target="_blank">兰空图床</a>，将图片单独托管的外链插件。</p>
 HTML;
-        $desc = new Typecho_Widget_Helper_Form_Element_Text('desc', NULL, '', '插件介绍：', $html);
+        $desc = new Text('desc', NULL, '', '插件介绍：', $html);
         $form->addInput($desc);
 
-        $api = new Typecho_Widget_Helper_Form_Element_Text('api', NULL, 'https://img.qzone.work:8443/', 'Api：', '默认地址为作者自建的图床，如果填其它地址，请必须保证地址为http开头，/结尾');
+        $api = new Text('api', NULL, 'https://img.qzone.work:8443/', 'Api：', '默认地址为作者自建的图床，如果填其它地址，请必须保证地址为http开头，/结尾');
         $form->addInput($api);
 
-        $token = new Typecho_Widget_Helper_Form_Element_Text('token', NULL, '', 'Token：', '如果为空，则上传的所属用户为游客；如果有需求请自行修改。');
+        $token = new Text('token', NULL, '', 'Token：', '如果为空，则上传的所属用户为游客；如果有需求请自行修改。');
         $form->addInput($token);
 
         echo '<script>window.onload = function(){document.getElementsByName("desc")[0].type = "hidden";}</script>';
     }
 
-    public static function personalConfig(Typecho_Widget_Helper_Form $form)
+    public static function personalConfig(Form $form)
     {
     }
 
-    public static function uploadHandle($file)
+    public static function uploadHandle($file): bool|array
     {
         if (empty($file['name'])) {
 
@@ -58,7 +66,7 @@ HTML;
         //获取扩展名
         $ext = self::_getSafeName($file['name']);
         //判定是否是允许的文件类型
-        if (!Widget_Upload::checkFileType($ext) || Typecho_Common::isAppEngine()) {
+        if (!Upload::checkFileType($ext) || Common::isAppEngine()) {
 
             return false;
         }
@@ -83,7 +91,7 @@ HTML;
         return unlink($content['attachment']->path);
     }
 
-    public static function modifyHandle($content, $file)
+    public static function modifyHandle($content, $file): bool|array
     {
         if (empty($file['name'])) {
 
@@ -91,7 +99,7 @@ HTML;
         }
 
         $ext = self::_getSafeName($file['name']);
-        if ($content['attachment']->type != $ext || Typecho_Common::isAppEngine()) {
+        if ($content['attachment']->type != $ext || Common::isAppEngine()) {
 
             return false;
         }
@@ -120,7 +128,7 @@ HTML;
         }
 
         $ret = explode(self::UPLOAD_DIR, $arr['path']);
-        return Typecho_Common::url(self::UPLOAD_DIR . $ret[1], Helper::options()->siteUrl);
+        return Common::url(self::UPLOAD_DIR . $ret[1], Helper::options()->siteUrl);
     }
 
     private static function _getUploadDir($ext = ''): string
@@ -132,7 +140,7 @@ HTML;
         } elseif (defined('__TYPECHO_UPLOAD_DIR__')) {
             return __TYPECHO_UPLOAD_DIR__;
         } else {
-            $path = Typecho_Common::url(self::UPLOAD_DIR, __TYPECHO_ROOT_DIR__);
+            $path = Common::url(self::UPLOAD_DIR, __TYPECHO_ROOT_DIR__);
             return $path;
         }
     }
@@ -185,7 +193,7 @@ HTML;
         return in_array($ext, $img_ext_arr);
     }
 
-    private static function _uploadOtherFile($file, $ext)
+    private static function _uploadOtherFile($file, $ext): bool|array
     {
         $dir = self::_getUploadDir($ext) . '/' . date('Y') . '/' . date('m');
         if (!self::_makeUploadDir($dir)) {
@@ -204,11 +212,11 @@ HTML;
             'path' => $path,
             'size' => $file['size'] ?? filesize($path),
             'type' => $ext,
-            'mime' => @Typecho_Common::mimeContentType($path)
+            'mime' => @Common::mimeContentType($path)
         ];
     }
 
-    private static function _uploadImg($file, $ext)
+    private static function _uploadImg($file, $ext): bool|array
     {
         $options = Helper::options()->plugin(self::PLUGIN_NAME);
         $api     = $options->api . 'api/upload';
@@ -275,7 +283,7 @@ HTML;
         return $json['code'] == 200;
     }
 
-    private static function _curlPost($api, $post, $token)
+    private static function _curlPost($api, $post, $token): bool|string
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $api);
