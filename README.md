@@ -8,6 +8,18 @@
 
 -------------------------------
 
+## Comment3Wechat
+
+> 一款将评论推送到微信的插件，接口：PushPlus
+
+原版是 https://github.com/YianAndCode/Comment2Wechat
+，但年久失修，且当下的Server酱也不是当初的Server酱；于是基于原版进行了修改，改为了PushPlus推送，且适配了`Typecho版本1.2.1`。
+
+### PushPlus
+
+个人在公众号底部会有广告，但总体不影响使用，对个人而言，免费版已经足够使用了。
+官网地址：https://www.pushplus.plus
+
 ## OssImg
 
 阿里云OSS 图床外链，基于插件(OssForTypecho)制作
